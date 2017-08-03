@@ -1,0 +1,95 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/mvc
+	http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+  
+
+<!-- Using Controller //checks in package with controller annotation ||
+		without this you must create a bean for each controller -->	
+	<context:component-scan base-package="com.series.hellocontroller" />
+	
+	<mvc:annotation-driven/>
+		<mvc:resources mapping="/resources/**" location="/WEB-INF/"></mvc:resources>
+	
+	
+	<mvc:interceptors>
+			
+		<mvc:interceptor>
+			<mvc:mapping path="/admissionForm.html"/>
+		 		<bean class="com.series.hellocontroller.DayOfWeekBasedAccessInterceptor" />
+		</mvc:interceptor>
+		
+		<bean class ="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+			<property name="paramName" value="siteLanguage"/>
+		</bean>
+		
+		<bean class="org.springframework.web.servlet.theme.ThemeChangeInterceptor">
+			<property name="paramName" value="siteTheme"/>
+		</bean>
+		
+	</mvc:interceptors>
+	
+	
+<!--  Not using controller annotation
+	 <bean	id="HandlerMapping"  class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"/>
+
+ <bean name="/welcome.html" class="com.series.hellocontroller.HelloController" />
+  -->	
+ 
+ 	<bean id="viewResolver"
+    	class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
+        <property name="prefix">
+            <value>/WEB-INF/</value>
+        </property>
+        <property name="suffix">
+            <value>.jsp</value>
+        </property>
+ 	</bean>
+ 
+ 	<bean id="messageSource"
+ 		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+ 		<property name="basename" value="/WEB-INF/studentmessages"/>
+ 	</bean>
+ 
+ 	<bean id="localeResolver"
+ 		class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+ 		
+ 	</bean>
+
+	<bean id ="themeSource" class="org.springframework.ui.context.support.ResourceBundleThemeSource">
+		<property name="basenamePrefix" value ="theme-" />
+	</bean>
+
+	<bean id="themeResolver" class="org.springframework.web.servlet.theme.CookieThemeResolver">
+		<property name="defaultThemeName" value="green" />
+	</bean>
+	
+	
+	<!-- 
+	<bean id="simpleMappingExceptionResolver"
+		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="exceptionMappings">
+			<map>
+				<entry key="NullPointerException" value=" "/>
+				<entry key="IOException" value="IOException"/>
+			</map>
+		</property>
+		
+		// This is the default error webpage or generic error webpage 
+		<property name="defaultErrorView" value="Exception"/>
+		
+		// Name of logger to use to log exception. unset by default, so logging is disabled.
+		<property name="warnLogCategory" value="MVCLogger"/>
+				
+		</bean>
+		 -->
+
+
+</beans>
